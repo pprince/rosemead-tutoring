@@ -8,9 +8,8 @@
 // =========
 #include <iostream>
 #include <cstdlib>
-#include <random>
 #include <string>
-#include <time.h>
+#include <ctime>
 using namespace std;
 
 
