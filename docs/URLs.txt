@@ -1,0 +1,4 @@
+Reference materials:    http://en.cppreference.com/w/
+Cheatsheet:             http://www.pa.msu.edu/~duxbury/courses/phy480/Cpp_refcard.pdf
+
+HOWTO clear screen:     http://www.cplusplus.com/articles/4z18T05o/
