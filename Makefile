@@ -1,9 +1,13 @@
 CXX = g++
 CPPFLAGS = -static -Wall
 
-all: helloworld heartseeker
+all: helloworld typewriter typewriter2 heartseeker
 
 helloworld: helloworld.cpp
+
+typewriter: typewriter.cpp
+
+typewriter2: typewriter2.cpp
 
 heartseeker: heartseeker.cpp
 
