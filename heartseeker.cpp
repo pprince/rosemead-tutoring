@@ -10,6 +10,7 @@
 #include <cstdlib>
 #include <random>
 #include <string>
+#include <time.h>
 using namespace std;
 
 
@@ -18,7 +19,7 @@ using namespace std;
 void cls();
 void enter_to_continue();
 void attack();
-void charge_up_attack();
+//void do_or_die();
 int rand_between(int min, int max);
 
 
@@ -26,15 +27,14 @@ int rand_between(int min, int max);
 // =========
 const int player_min_damage = 50;      // Smallest possible damage a player's attack can deal.
 const int player_max_damage = 100;     // Largest possible damage a player's attack can deal.
-//const int charge_min_multi = 1		  // Small possible damage multiplier when using charge up.
-//const int charge_max_multi = 3		  // Large possible damage multiplier when using charge up.
+const int do_or_die = 500;
 
 // Global Variables
 // ================
 string input;               // User input, from the command line.
 int turn = 1;               // Which turn is it?
 int player_hp = 100;        // Player's Health
-int boss_hp = 850;         // Computer's Health
+int boss_hp = 1180;         // Computer's Health
 
 
 // Execution starts here...
@@ -47,25 +47,29 @@ int main() {
 	cls();
 
 	cout << " Grey: \"My lord...We have terrible news. The deamon lord Azmodan has stolen your son's heart..."
-			"now he won't wake up\"" << endl;
+		"now he won't wake up\"" << endl;
 	enter_to_continue();
-	
+
+	cls();
 	cout << " [you stare at the face of your resting son] " << endl;
 	cout << "=============================================" << endl;
 	cout << " \"My boy...I swear to you...I will not rest until I get your heart back\" " << endl;
 	enter_to_continue();
 
+	cls();
 	cout << "________________________" << endl;
 	cout << "| Twenty years later...|" << endl;
 	cout << "|______________________|" << endl;
 	enter_to_continue();
 
+	cls();
 	cout << " \"You: Two decades of searching through these blasted lands..."
-			"I now face Azmodan... This is the final battle... My son...I will save you\" " << endl;
+		"I now face Azmodan... This is the final battle... My son...I will save you\" " << endl;
 	enter_to_continue();
 
+	cls();
 	cout << "Azmodan:\"Your efforts have been for nought!"
-		"...with your son's pure heart I shall envelop the world with darkness\"" << endl; 
+		"...with your son's pure heart I shall envelop the world with darkness\"" << endl;
 	enter_to_continue();
 
 
@@ -77,7 +81,7 @@ int main() {
 		// ==========
 
 		cout << "Turn #" << turn << endl;
-		cout << "Boss HP: " << boss_hp << endl;
+		//cout << "Boss HP: " << boss_hp << endl;
 		cout << "Player HP: " << player_hp << endl;
 		cout << "==============================================" << endl;
 		cout << endl;
@@ -88,8 +92,7 @@ int main() {
 		cout << "  MENU" << endl;
 		cout << "  ----" << endl;
 		cout << "    1 - Attack" << endl;
-		cout << "    2 - Charge Up (logic not yet implemented)" << endl;
-		cout << "    3 - DO-OR-DIE (logic not yet implemented)" << endl;
+		cout << "    2 - Do-Or-Die (kill or be killed)" << endl;
 		cout << endl;
 		cout << " Your choice? ";
 
@@ -102,10 +105,11 @@ int main() {
 			attack();
 		}
 		else if (input == "2") {
-			cout << "Sorry, this feature is not yet implemented :(" << endl;
-			turn++;
+			cout << "This is it... I shall pure the last of my energy into this attack!" << endl;
+			boss_hp -= do_or_die;
+			player_hp -= 100;
 			enter_to_continue();
-			continue;
+			
 		}
 		else {
 			cout << "Invalid choice; try again..." << endl;
@@ -117,9 +121,18 @@ int main() {
 		// ==================
 		if (boss_hp <= 0) {
 			// Player wins!
+			cls();
 			cout << endl;
+			cout << "__________________________________________________________________________" << endl;
+			cout << "|Your journey was long and hard faught, but you managed to save the world|" << endl;
+			cout << "|...but more importantly your son.                                       |" << endl;
+			cout << "|________________________________________________________________________|" << endl;
+			cout << endl;
+			cout << "__________________________________________________________________________" << endl;
+			cout << "|A year as past and your son has aged since your journey. He has made a  |" << endl;
+			cout << "|full recovery...soon your kingdom will belong to your dear son.         | " << endl;
+			cout << "|________________________________________________________________________|" << endl;
 			cout << "CONGRATULATIONS, you have vanquished Azmodan." << endl;
-			cout << "The villagers sing your praises." << endl;
 			break;
 		}
 
@@ -177,14 +190,15 @@ void attack() {
 	cout << "You deal " << damage << " to Azmodan." << endl;
 }
 
-//void charge_up() { 
-	int charge_up = rand_between(charge_min_multi, charge_max_multi);
-
-	attack()
-}
+//void do_or_die() {
+//damage for the final attack
+//boss_hp -= const int do_or_die
+//player
+//}
 
 // Generates a random integer between min and max
 int rand_between(int min, int max) {
+	srand(time(NULL)); 
 	int result = (rand() % (max - min + 1)) + min;
 	return result;
 }
