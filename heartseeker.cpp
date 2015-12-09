@@ -8,7 +8,6 @@
 // =========
 #include <iostream>
 #include <cstdlib>
-#include <random>
 #include <string>
 using namespace std;
 
@@ -17,7 +16,7 @@ using namespace std;
 // =====================
 void cls();
 void enter_to_continue();
-void attack();
+void attack(int damage_multiplier=1);
 void charge_up_attack();
 int rand_between(int min, int max);
 
@@ -26,15 +25,17 @@ int rand_between(int min, int max);
 // =========
 const int player_min_damage = 50;      // Smallest possible damage a player's attack can deal.
 const int player_max_damage = 100;     // Largest possible damage a player's attack can deal.
-//const int charge_min_multi = 1                  // Small possible damage multiplier when using charge up.
-//const int charge_max_multi = 3                  // Large possible damage multiplier when using charge up.
+const int charge_min_multi = 1;        // Small possible damage multiplier when using charge up.
+const int charge_max_multi = 3;        // Large possible damage multiplier when using charge up.
+
 
 // Global Variables
 // ================
-string input;               // User input, from the command line.
-int turn = 1;               // Which turn is it?
-int player_hp = 100;        // Player's Health
-int boss_hp = 850;         // Computer's Health
+string input;                       // User input, from the command line.
+int turn = 1;                       // Which turn is it?
+int player_hp = 100;                // Player's Health
+int boss_hp = 850;                  // Computer's Health
+bool did_chargeup = false;          // Track whether the Charge-Up attack was used on previous turn.
 
 
 // Execution starts here...
@@ -85,32 +86,47 @@ int main() {
                 // PLAYER'S TURN
                 // =============
 
-                cout << "  MENU" << endl;
-                cout << "  ----" << endl;
-                cout << "    1 - Attack" << endl;
-                cout << "    2 - Charge Up (logic not yet implemented)" << endl;
-                cout << "    3 - DO-OR-DIE (logic not yet implemented)" << endl;
-                cout << endl;
-                cout << " Your choice? ";
+                if (did_chargeup == false) {
+                        // TYPICAL CASE; previous attack was NOT skipped for charge-up ...
+                        // ... We print the menu, get the player's selection, and do a normal attack.
 
-                // Get user's choice from the command line.
-                getline(cin, input);
+                        cout << "  MENU" << endl;
+                        cout << "  ----" << endl;
+                        cout << "    1 - Attack" << endl;
+                        cout << "    2 - Charge Up" << endl;
+                        cout << "    3 - DO-OR-DIE (logic not yet implemented)" << endl;
+                        cout << endl;
+                        cout << " Your choice? ";
 
-                cout << endl;
+                        // Get user's choice from the command line.
+                        getline(cin, input);
+                        cout << endl;
 
-                if (input == "1") {
-                        attack();
+                        if (input == "1") {
+                                attack();
+                        }
+                        else if (input == "2") {
+                                cout << "You forego your attack, and gather your strength..." << endl;
+                                did_chargeup = true;
+                        }
+                        else {
+                                cout << "Invalid choice; try again..." << endl;
+                                enter_to_continue();
+                                continue;
+                        }
                 }
-                else if (input == "2") {
-                        cout << "Sorry, this feature is not yet implemented :(" << endl;
-                        turn++;
-                        enter_to_continue();
-                        continue;
-                }
-                else {
-                        cout << "Invalid choice; try again..." << endl;
-                        enter_to_continue();
-                        continue;
+                else {  // SPECIAL CASE; did_chargeup == true ...
+                        // So, we skip the usual menu+prompt, and instead auto-attack w/ bonus charge-up damage.
+
+                        int multiplier = rand_between(charge_min_multi, charge_max_multi);
+
+                        cout << "Because you meditated and charged up your energies before attacking," << endl;
+                        cout << "    you deal " << multiplier << " times as much damage as usual!" << endl;
+                        cout << endl;
+
+                        attack(multiplier);
+
+                        did_chargeup = false;
                 }
 
                 // Check if boss died
@@ -135,7 +151,7 @@ int main() {
                 if (player_hp <= 0) {
                         // Player loses!
                         cout << endl;
-                        cout << "My son...I've failed you...I have nothing else to live for T_T" << endl;
+                        cout << "My son...I've failed you...I hav\e nothing else to live for T_T" << endl;
                         cout << endl;
                         cout << "  ... 64M3 0V3R, N00B." << endl;
                         break;
@@ -167,20 +183,14 @@ void enter_to_continue() {
         getline(std::cin, ignored_input);
 }
 
-void attack() {
+void attack(int damage_multiplier) {
         // Calculate damage dealt by this attack
-        int damage = rand_between(player_min_damage, player_max_damage);
+        int damage = rand_between(player_min_damage, player_max_damage) * damage_multiplier;
 
         // Remove the damage-dealt from the boss' health
         boss_hp -= damage;
 
         cout << "You deal " << damage << " to Azmodan." << endl;
-}
-
-//void charge_up() {
-        int charge_up = rand_between(charge_min_multi, charge_max_multi);
-
-        attack()
 }
 
 // Generates a random integer between min and max
